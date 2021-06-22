@@ -16,7 +16,7 @@ import 'primereact/resources/themes/nova/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
-export default class App extends Component{
+export default class Product extends Component{
   constructor(){
     super();
     this.showSuccess = this.showSuccess.bind(this);
@@ -53,7 +53,7 @@ export default class App extends Component{
       command : () =>{this.delete()}
     },
     {
-      label : 'Product',
+      label : 'Products',
       icon  : 'pi pi-fw pi-link',
       command : () =>{alert('navegate')}
     }
@@ -138,7 +138,7 @@ export default class App extends Component{
       <Panel header="BLAZE" >
       
       <Menubar model={this.items}/>
-        <h1>Orders</h1>
+        <h1>Product</h1>
         <div style={{float: 'right', margin: '1em'}} >{this.save}</div>
          <DataTable value={this.state.ordenes} 
            paginator={true} rows="4" selectionMode="single"
