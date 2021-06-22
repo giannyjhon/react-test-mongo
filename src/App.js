@@ -62,7 +62,11 @@ export default class App extends Component{
     {
       label : 'Product',
       icon  : 'pi pi-fw pi-link',
-      command : () =>{alert('navegate')}
+      command : () =>{
+       <Link to="/product">
+      prducts
+        </Link>
+        }
     }
 
     ];
@@ -218,7 +222,7 @@ export default class App extends Component{
         </Dialog>
         <Switch>
           <Route path="/product">
-            pagina nueva
+            {/* <Product /> */}
           </Route>
         </Switch>
         </Router>

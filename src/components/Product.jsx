@@ -1,7 +1,7 @@
 //import logo from './logo.svg';
 import './App.css';
 import { Component } from 'react';
-import { OrderService } from './service/OrderService';
+import { OrderService } from '../service/OrderService';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import {Panel } from 'primereact/panel';

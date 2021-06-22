@@ -1,7 +1,7 @@
 //import logo from './logo.svg';
 import './App.css';
 import { Component } from 'react';
-import { OrderService } from './service/OrderService';
+import { OrderService } from '../service/OrderService';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import {Panel } from 'primereact/panel';
@@ -23,7 +23,7 @@ import 'primereact/resources/themes/nova/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
-export default class App extends Component{
+export default class Order extends Component{
   constructor(){
     super();
     this.showSuccess = this.showSuccess.bind(this);
@@ -145,7 +145,7 @@ export default class App extends Component{
       <Panel header="BLAZE" >
       
       <Menubar model={this.items}/>
-        <h1>Orders</h1>
+        <h1>Orders N</h1>
         <div style={{float: 'right', margin: '1em'}} >{this.save}</div>
          <DataTable value={this.state.ordenes} 
            paginator={true} rows="4" selectionMode="single"
