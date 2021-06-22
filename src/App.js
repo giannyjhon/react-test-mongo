@@ -10,6 +10,13 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+  } from 'react-router-dom'
+
 
 
 import 'primereact/resources/themes/nova/theme.css';
@@ -134,7 +141,7 @@ export default class App extends Component{
     return (
      
       <div style={{width:'90%', margin: '0 auto', marginTop: '20px'}}>
-        
+        <Router>
       <Panel header="BLAZE" >
       
       <Menubar model={this.items}/>
@@ -209,6 +216,12 @@ export default class App extends Component{
         <Toast ref={(el) => this.toast = el} />
         </form>
         </Dialog>
+        <Switch>
+          <Route path="/product">
+            pagina nueva
+          </Route>
+        </Switch>
+        </Router>
       </div>
     );
   }
