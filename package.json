@@ -2,7 +2,7 @@
   "name": "react-test-mongo",
   "version": "1.0.0",
   "engines": {
-    "node": "12..16.1",
+    "node": "12.16.1",
     "npm": "^7.18.1"
   },
   "private": true,
