@@ -3,7 +3,7 @@ import axios from 'axios';
 export class ProductService{
 
     //path API
-    url = "http://localhost:8080/api/product";
+    url = "https://test-fractal.herokuapp.com/api/product";
 
 
     //Metod all orders
