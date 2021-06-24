@@ -10,6 +10,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
+import { Dropdown } from 'primereact/dropdown';
 import {
   BrowserRouter as Router,
   Switch,
@@ -29,6 +30,7 @@ export default class Order extends Component{
     this.showSuccess = this.showSuccess.bind(this);
     this.state = {
       visible : false,
+      visible2 : false,
       order: {
       id : null ,
 		  status : null ,
@@ -43,6 +45,14 @@ export default class Order extends Component{
 
       }
     };
+
+    this.select = [
+      {label: 'Pending', value: 'Pending'},
+      {label: 'Completed', value: 'Completed'},
+      {label: 'Rejected', value: 'Rejected'}
+    
+  ];
+
     this.items = [
       {
       label : 'Create Order',
@@ -69,7 +79,8 @@ export default class Order extends Component{
     ];
     this.ordenService = new OrderService();
     this.save = this.save.bind(this);
-    this.delete = this.delete.bind(this)
+    this.delete = this.delete.bind(this);
+    
   
 
     this.footer = (
@@ -77,13 +88,13 @@ export default class Order extends Component{
       <Button label="Save" icon="pi pi-check" onClick={this.save} />
       </div>
     );
-    this.save = (
+    this.save3 = (
       <div>
       <Button label="Create Order" icon="pi pi-check" onClick={this.showSaveDialog()} />
       </div>
     );
 
-   
+    
   
   }
 
@@ -112,7 +123,7 @@ export default class Order extends Component{
     this.ordenService.save(this.state.order).then(data =>{
      
       this.setState({
-      visible : false,
+     
       order: {
       id : null ,
 		  status : null ,
@@ -130,23 +141,32 @@ export default class Order extends Component{
      this.ordenService.getAll().then(data => this.setState({order: data}));
     })
   }
-  showSuccess() {
-    this.toast.show({severity:'success', summary: 'Success Message', detail:'Message Content', life: 3000});
-}
+ 
 
   delete(){
-    if ( !this.state.selectedProduct.id){
+    if ( !this.state.selectedOrder.id){
       alert('you must select a record')
        return
     }
     if(window.confirm("¿Realy your confirm delete the regis?")){
         this.ordenService.delete(this.state.selectedOrder.id).then(
           data =>{
+            //this.showSuccessD()
             this.ordenService.getAll().then(data => this.setState({order: data}));
+           alert('Deleted')
           }
         )
     }
+    
   }
+
+  showSuccess() {
+    this.toast.show({severity:'success', summary: 'Edit', detail:'Success Edit', life: 3000});
+}
+showSuccessD() {
+  this.toast.show({severity:'success', summary: 'Delete', detail:'Success Delete', life: 3000});
+}
+
   render(){
     return (
      
@@ -173,7 +193,7 @@ export default class Order extends Component{
         <Dialog footer={this.footer} header="Order" visible={this.state.visible} style={{width: '400px'}} modal={true} onHide={() => this.setState({visible: false})}>
         <form id="form-order">
         <span className="p-float-label">
-        <InputText value={this.state.order.id} style={{width : '100%'}} id="id" onChange={(e) => {
+        <InputText  value={this.state.order.id} style={{width : '100%'}} id="id" onChange={(e) => {
          
          let val = e.target.value
          this.setState(prevState => {
@@ -187,6 +207,22 @@ export default class Order extends Component{
         </span>
          <br/>
         <span className="p-float-label">
+        <Dropdown value={this.state.order.status} options={this.select} 
+        onChange={(e) => {
+           
+          let val = e.target.value
+          this.setState(prevState => {
+                    
+           let order = Object.assign({}, prevState.order);
+                          order.status = val
+                        console.log('es status: ',order.status)
+                        return { order };
+         })}} 
+        placeholder="Select Status"/>
+        </span>
+        
+        {/* <br/>
+        <span className="p-float-label">
         <InputText value={this.state.order.status} style={{width : '100%'}} id="status" onChange={(e) => {
           let val = e.target.value
           this.setState(prevState => {
@@ -197,7 +233,7 @@ export default class Order extends Component{
                         return { order };
          })}} />
         <label htmlFor="status">Status</label>
-        </span>
+        </span> */}
         <br/>
         <span className="p-float-label">
         <InputText value={this.state.order.createAt} style={{width : '100%'}} id="createAt" onChange={(e) => {
@@ -228,11 +264,76 @@ export default class Order extends Component{
         <Toast ref={(el) => this.toast = el} />
         </form>
         </Dialog>
+
+
+        {/* MODAL EDIT */}
+        <Dialog footer={this.footer} header="Order Edit" visible={this.state.visible2} style={{width: '400px'}} modal={true} onHide={() => this.setState({visible2: false})}>
+        <form id="form-order">
+        <span className="p-float-label">
+        <InputText hidden value={this.state.order.id} style={{width : '100%'}} id="id" onChange={(e) => {
+         
+         let val = e.target.value
+         this.setState(prevState => {
+          //console.log('es: ',val)
+           let order = Object.assign({}, prevState.order);
+                            order.id = val
+                        console.log('es id: ',order.id)
+                        return { order };
+         })}} />
+        
+        </span>
+         <br/>
+        <span className="p-float-label">
+        <Dropdown value={this.state.order.status} options={this.select} 
+        onChange={(e) => {
+           
+          let val = e.target.value
+          this.setState(prevState => {
+                    
+           let order = Object.assign({}, prevState.order);
+                          order.status = val
+                        console.log('es status: ',order.status)
+                        return { order };
+         })}} 
+        placeholder="Select Status"/>
+        </span>
+        
+        <br/>
+        <span className="p-float-label">
+        <InputText readOnly value={this.state.order.createAt} style={{width : '100%'}} id="createAt" onChange={(e) => {
+          let val = e.target.value
+          this.setState(prevState => {
+                    
+           let order = Object.assign({}, prevState.order);
+                            order.createAt = val
+                        console.log('es createAt: ',order.createAt)
+                        return { order };
+         })} } />
+        <label htmlFor="createAt">Date</label>
+        </span>
+        <br/>
+        <span className="p-float-label">
+        <InputText readOnly value={this.state.order.customer} style={{width : '100%'}} id="customer" onChange={(e) => {
+          let val = e.target.value
+          this.setState(prevState => {
+                    
+           let order = Object.assign({}, prevState.order);
+                              order.customer = val
+                        console.log('es customer: ',order.customer)
+                        return { order };
+         })} }/>
+        <label htmlFor="customer">Consumer</label>
+        </span>
+
+        <Toast ref={(el) => this.toast = el} />
+        </form>
+        </Dialog>
         
       </div>
     );
   }
   showSaveDialog(){
+    
     this.setState({
       visible : true,
       order: {
@@ -243,22 +344,19 @@ export default class Order extends Component{
         taxesAmounts : 32.5 ,
         totalTaxes : 40 ,
         totalAmount : 41 ,
-        items : {
-          id : 4 ,
-		    name : " " ,
-		    uniPrice : null
-        }
+        items : null 
         }
     })
   }
 
   showEdit(){
+    
     if ( !this.state.selectedOrder.id){
       alert('you must select a record')
        return
     }
     this.setState({
-      visible: true,
+      visible2: true,
       order: {
         id : this.state.selectedOrder.id ,
         status : this.state.selectedOrder.status ,
@@ -267,11 +365,7 @@ export default class Order extends Component{
         taxesAmounts : 32.5 ,
         totalTaxes : 40 ,
         totalAmount : 41 ,
-        items : {
-          id : 4 ,
-		    name : "cokes" ,
-		    uniPrice : 12
-        }
+        items : null 
         }
     })
   }

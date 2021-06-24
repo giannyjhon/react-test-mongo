@@ -10,6 +10,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
+import { Dropdown } from 'primereact/dropdown';
 
 import {
   BrowserRouter as Router,
@@ -77,6 +78,12 @@ export default class Product extends Component{
       <Button label="Create Order" icon="pi pi-check" onClick={this.showSaveDialog()} />
       </div>
     );
+
+    const select = [
+      {label: 'Active', value: 'True'},
+      {label: 'Not Active', value: 'False'},
+    
+  ];
   
   }
   
@@ -233,6 +240,7 @@ export default class Product extends Component{
     );
   }
   showSaveDialog(){
+    this.productService.getAll().then(data => this.setState({product: data}));
     this.setState({
       visible : true,
       product: {
@@ -247,7 +255,7 @@ export default class Product extends Component{
   }
 
   showEdit(){
-
+    this.productService.getAll().then(data => this.setState({product: data}));
     if ( !this.state.selectedProduct.id){
       alert('you must select a record')
        return
