@@ -1,6 +1,10 @@
 {
   "name": "react-test-mongo",
   "version": "0.1.0",
+  "description": "a really cool app",
+  "engines": {
+    "node": "12.16.1"
+  },
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
