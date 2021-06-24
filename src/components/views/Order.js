@@ -1,7 +1,7 @@
 //import logo from './logo.svg';
 import './App.css';
 import { Component } from 'react';
-import { OrderService } from '../service/OrderService';
+import { OrderService } from '../../service/OrderService';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import {Panel } from 'primereact/panel';
@@ -17,7 +17,7 @@ import {
   Link
   } from 'react-router-dom'
 
-
+  import Product from "./Product";
 
 import 'primereact/resources/themes/nova/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -58,17 +58,19 @@ export default class Order extends Component{
       label : 'Delete',
       icon  : 'pi pi-fw pi-trash',
       command : () =>{this.delete()}
-    },
+    }
+    ,
     {
-      label : 'Product',
+      label : 'Add Items',
       icon  : 'pi pi-fw pi-link',
-      command : () =>{alert('navegate')}
+      command : () =>{alert('add items' + ' '+ this.state.selectedOrder.id)}
     }
 
     ];
     this.ordenService = new OrderService();
     this.save = this.save.bind(this);
     this.delete = this.delete.bind(this)
+  
 
     this.footer = (
       <div>
@@ -80,11 +82,15 @@ export default class Order extends Component{
       <Button label="Create Order" icon="pi pi-check" onClick={this.showSaveDialog()} />
       </div>
     );
+
+   
   
   }
+
+  
   
   componentDidMount(){
-    this.ordenService.getAll().then(data => this.setState({ordenes: data}));
+    this.ordenService.getAll().then(data => this.setState({order: data}));
     // this.setState({
     //   visible : false,
     //   order: {
@@ -121,7 +127,7 @@ export default class Order extends Component{
      this.showSuccess()
      // this.growl.show({severity: 'success', summary: 'Atención!', detail: 'Se guardó el registro correctamente.'});
     //this.toast.current.show({severity: 'success', summary: 'Success Message', detail: 'Order submitted'});
-     this.ordenService.getAll().then(data => this.setState({ordenes: data}));
+     this.ordenService.getAll().then(data => this.setState({order: data}));
     })
   }
   showSuccess() {
@@ -129,10 +135,14 @@ export default class Order extends Component{
 }
 
   delete(){
+    if ( !this.state.selectedProduct.id){
+      alert('you must select a record')
+       return
+    }
     if(window.confirm("¿Realy your confirm delete the regis?")){
         this.ordenService.delete(this.state.selectedOrder.id).then(
           data =>{
-            this.ordenService.getAll().then(data => this.setState({ordenes: data}));
+            this.ordenService.getAll().then(data => this.setState({order: data}));
           }
         )
     }
@@ -141,16 +151,18 @@ export default class Order extends Component{
     return (
      
       <div style={{width:'90%', margin: '0 auto', marginTop: '20px'}}>
-        <Router>
+        
+          
+       
       <Panel header="BLAZE" >
       
-      <Menubar model={this.items}/>
-        <h1>Orders N</h1>
-        <div style={{float: 'right', margin: '1em'}} >{this.save}</div>
-         <DataTable value={this.state.ordenes} 
+      <Menubar model={this.items} start={<InputText placeholder="Search" type="text"/>} end={ <Link to="/product">Products</Link>}/>
+        <h1>Orders </h1>
+        <div style={{float: 'right', margin: '1em'}} ></div>
+         <DataTable value={this.state.order} 
            paginator={true} rows="4" selectionMode="single"
           selection={this.state.selectedOrder} onSelectionChange={e => this.setState({selectedOrder: e.value})}>
-           <Column field="id" header="N°"></Column>
+           <Column field="id" key="id" header="N°"></Column>
            <Column field="customer" header="Consumer"></Column>
            <Column field="status" header="Status"></Column>
            <Column field="createAt" header="Date"></Column>
@@ -216,12 +228,7 @@ export default class Order extends Component{
         <Toast ref={(el) => this.toast = el} />
         </form>
         </Dialog>
-        <Switch>
-          <Route path="/product">
-            pagina nueva
-          </Route>
-        </Switch>
-        </Router>
+        
       </div>
     );
   }
@@ -236,12 +243,20 @@ export default class Order extends Component{
         taxesAmounts : 32.5 ,
         totalTaxes : 40 ,
         totalAmount : 41 ,
-        items : null 
+        items : {
+          id : 4 ,
+		    name : " " ,
+		    uniPrice : null
+        }
         }
     })
   }
 
   showEdit(){
+    if ( !this.state.selectedOrder.id){
+      alert('you must select a record')
+       return
+    }
     this.setState({
       visible: true,
       order: {
@@ -252,7 +267,11 @@ export default class Order extends Component{
         taxesAmounts : 32.5 ,
         totalTaxes : 40 ,
         totalAmount : 41 ,
-        items : null 
+        items : {
+          id : 4 ,
+		    name : "cokes" ,
+		    uniPrice : 12
+        }
         }
     })
   }
